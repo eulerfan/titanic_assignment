@@ -1,0 +1,80 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+1: Port of embarkation
+
+The embarked column has some missing values, which are known to correspond to passengers who actually embarked at Southampton. Find the missing values and replace them with S. (Caution: Sometimes a missing value might be read into R as a blank or empty string.)
+
+2: Age
+
+You’ll notice that a lot of the values in the Age column are missing. While there are many ways to fill these missing values, using the mean or median of the rest of the values is quite common in such cases.
+
+Calculate the mean of the Age column and use that value to populate the missing values
+
+Think about other ways you could have populated the missing values in the age column. Why would you pick any of those over the mean (or not)?
+
+3: Lifeboat
+
+You’re interested in looking at the distribution of passengers in different lifeboats, but as we know, many passengers did not make it to a boat :-( This means that there are a lot of missing values in the boat column. Fill these empty slots with a dummy value e.g. the string 'None' or 'NA'
+
+4: Cabin
+
+You notice that many passengers don’t have a cabin number associated with them.
+
+Does it make sense to fill missing cabin numbers with a value?
+
+What does a missing value here mean?
+
+You have a hunch that the fact that the cabin number is missing might be a useful indicator of survival. Create a new column has_cabin_number which has 1 if there is a cabin number, and 0 otherwise.
+
+5: Submit the project on Github
+
+Include your code, the original data as a CSV file titanic_original.csv, and the cleaned up data as a CSV file called titanic_clean.csv.
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+```{r}
+
+library(tidyr)
+library(dplyr)
+library(readr)
+
+titanic<- read.csv("~/R/titanic_submission/titanic_original.csv")
+#
+
+#1: Port of embarkation
+
+   
+titanic$embarked[titanic$embarked==""]<-"S"
+
+titanic<-titanic[-1310,]
+
+#2 Age
+
+titanic$age[which(is.na(titanic$age))]<-median(titanic$age,na.rm = TRUE)
+
+#3: Lifeboat
+
+titanic$boat[titanic$boat==""]<-'NA'
+
+#4: Cabin
+
+titanic$has_cabin_number<-
+  replace(titanic$has_cabin_number,titanic$cabin=="",0)
+
+
+titanic$has_cabin_number[which(is.na(titanic$has_cabin_number))]<-1
+
+View(titanic)
+titanic_clean<-titanic
+
+write_csv(titanic_clean,"~/R/titanic_submission/titanic_clean.csv")
+
+```
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
